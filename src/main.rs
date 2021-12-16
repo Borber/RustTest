@@ -1,12 +1,14 @@
 mod util;
+mod errors;
 
 use std::env;
 use walkdir::WalkDir;
-use crate::util::{clp, zip, file};
-use curve25519_parser::generate_keypair;
+use crate::util::{clp, zip, file, sys};
 use rand::rngs::OsRng;
 
 fn main()  -> Result<(), std::io::Error> {
+    println!("当前运行路径: {}", sys::get_current_dir().unwrap() );
+    //}
     // let mut csprng = OsRng {};
     // let keypair = generate_keypair(&mut csprng).unwrap();
     // println!("{:?}", keypair.public_der);

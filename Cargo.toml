@@ -8,8 +8,8 @@ edition = "2021"
 [dependencies]
 tar = "0.4"
 flate2 = { version = "1.0.17", features = ["zlib-ng-compat"], default-features = false }
-rand = "0.7.3"
+rand = "0.8"
 clipboard-win = "4.2.2"
 walkdir = "2"
-curve25519-parser = "0.2.0"
 mla = "1.2.0"
+thiserror = "1.0"
