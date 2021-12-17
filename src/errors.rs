@@ -3,15 +3,12 @@ use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum DaMeiError {
-    #[error("Basic error")]
+    #[error("basic error")]
     IOError(#[from] io::Error),
-    #[error("the data for key `{0}` is not available")]
-    Redaction(String),
-    #[error("invalid header (expected {expected:?}, found {found:?})")]
-    InvalidHeader {
-        expected: String,
-        found: String,
-    },
+    #[error("fail to: {0}")]
+    RunSomethingError(String),
+    #[error("command failed: {0}")]
+    RunCommandError(String),
     #[error("unknown data store error")]
     Unknown,
 }
