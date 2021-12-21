@@ -1,2 +1,4 @@
+# 测试一下注释
+# mlar 的绝对位置
 [mlar]
 path = "C:\\Users\\BORBER\\CLionProjects\\RustTest\\bin\\mlar"
