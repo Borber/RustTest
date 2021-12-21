@@ -1,6 +1,6 @@
 // Pack malr operations as functions
 
-use crate::errors::DaMeiError;
+use crate::errors::DaMieError;
 use crate::util::sys;
 
 // pub fn keygen(path: &str, key: &str) -> Result<T, DaMeiError> {

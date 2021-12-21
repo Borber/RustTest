@@ -3,6 +3,6 @@ use rust_test::util::config;
 
 #[test]
 fn get_config() -> Result<(), io::Error>{
-    config::get_config(&String::from("log/settings.toml"));
+    print!("{}", config::get_config(&String::from("log/settings.toml")).unwrap());
     Ok(())
 }

@@ -1,19 +1,22 @@
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::Read;
 use serde::Deserialize;
+use crate::errors::{DaMieError, rs_error};
 
 // TODO 定义配置
 
 #[derive(Deserialize)]
-struct Config {
+pub struct RustConfig {
     mlar: MlarConfig
 }
 
 #[derive(Deserialize)]
-struct MlarConfig {
+pub struct MlarConfig {
     path: String
 }
 
-impl std::fmt::Display for Config {
+impl std::fmt::Display for RustConfig {
     fn fmt(&self, fmt: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
         write!(fmt, indoc::indoc!(r"
           Config:
@@ -23,21 +26,23 @@ impl std::fmt::Display for Config {
                self.mlar.path)
     }
 }
-// TODO 保存配置
-
 
 // TODO 读取配置
 
-pub fn get_config(name: &String){
-    let mut settings = config::Config::default();
-    settings.merge(config::File::with_name(name)).unwrap();
-    ;
-    println!("{}", settings.try_into::<Config>().unwrap())
+pub fn get_config(name: &String) -> Result<RustConfig, DaMieError>{
+    let mut file = match File::open(name) {
+        Ok(f) => f,
+        Err(_) => {
+            return Err(rs_error("open config file"));
+        }
+    };
+    let mut str_val = String::new();
+    if file.read_to_string(&mut str_val).is_err() {
+        return Err(rs_error("open config file"));
+    }
+    toml::from_str(&str_val)
+        .map_err(|_| rs_error("get config from str"))
 }
-
-// TODO 更新配置
-
-// TODO 输出配置
 
 // TODO 初始化配置
 
