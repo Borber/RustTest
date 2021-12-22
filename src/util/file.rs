@@ -1,4 +1,12 @@
-use std::fs::{File, Metadata};
+use std::ffi::CString;
+use std::fs::{File, Metadata, OpenOptions};
+use std::hash::Hash;
+use std::io::{BufReader, BufWriter, Read, Seek, SeekFrom, Write};
+use std::mem;
+use std::mem::MaybeUninit;
+use std::os::windows::fs::FileExt;
+use std::path::Path;
+use std::str::from_utf8;
 use crate::errors::{DaMieError, rs_error};
 
 
@@ -35,14 +43,47 @@ pub struct Data {
 
 }
 
-pub fn metadata(path: &str) -> Result<Metadata, DaMieError> {
+pub fn metadata(path: &Path) -> Result<Metadata, DaMieError> {
     let mut f = match File::open(path){
         Ok(f) => f,
         Err(_) => return Err(rs_error("open file for metadata"))
     };
-    let data = match f.metadata(){
-        Ok(d) => d,
-        Err(_) => return Err(rs_error("get file metadata"))
+    f.metadata().map_err(|_| rs_error("get file metadata"))
+}
+
+pub fn read_file_header(path: &Path) -> Result<Vec<u8>, DaMieError>{
+    let mut buf = [0u8; 4];
+    let mut file = File::open(path)?;
+    file.read_exact(&mut buf);
+    Ok(buf.to_vec())
+}
+
+pub fn read_file(path: &Path) -> Result<Vec<u8>, DaMieError> {
+    let file = File::open(path)?;
+    let mut buf_reader = BufReader::new(file);
+    let mut buffer: Vec<u8> = Vec::new();
+    buf_reader.read_to_end(&mut buffer)?;
+    Ok(buffer)
+}
+
+pub fn save_file(data: Vec<u8>, path: &Path) -> std::io::Result<()> {
+    let mut file = File::create(path)?;
+    file.write_all(&data)?;
+    Ok(())
+}
+
+pub fn to_fake_gz(path: &Path, uuid: &str) -> Result<usize, DaMieError> {
+    let header_old = read_file_header(path)?;
+    let header:[u8; 4] = [77, 90, 144, 0];
+    let mut buf = [0u8; 4];
+    let mut f = BufReader::new(File::open(path).unwrap());
+    let mut file = OpenOptions::new().write(true).open(path)?;
+    while f.read_exact(&mut buf).is_ok() {
+        println!("{:?}", buf);
     };
 
+    file.write(&header)?;
+    file.write(&header)?;
+    file.write(&header)?;
+    Ok(file.write(&header)?)
 }
