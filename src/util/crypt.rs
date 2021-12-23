@@ -1,7 +1,6 @@
 use crate::errors::DaMieError;
 
 pub fn get_blake3_hash(data: &Vec<u8>) -> Result<blake3::Hash, DaMieError> {
-    //check len() of ec with data
     let hash: blake3::Hash = if data.len() < 128000 {
         blake3::hash(&data)
     } else {

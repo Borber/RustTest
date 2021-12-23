@@ -81,9 +81,5 @@ pub fn to_fake_gz(path: &Path, uuid: &str) -> Result<usize, DaMieError> {
     while f.read_exact(&mut buf).is_ok() {
         println!("{:?}", buf);
     };
-
-    file.write(&header)?;
-    file.write(&header)?;
-    file.write(&header)?;
     Ok(file.write(&header)?)
 }

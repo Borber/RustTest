@@ -5,7 +5,15 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+neon = ["blake3/neon"]
+prefer_intrinsics = ["blake3/prefer_intrinsics"]
+pure = ["blake3/pure"]
+
+
 [dependencies]
+anyhow = "1.0"
+memmap = "0.7.0"
 tar = "0.4"
 flate2 = { version = "1.0.17", features = ["zlib-ng-compat"], default-features = false }
 uuid = { version = "0.8", features = ["serde", "v4"] }
@@ -16,3 +24,4 @@ toml = "0.5"
 serde = { version = "1.0", features = ["derive"] }
 indoc = "1.0"
 blake3 = "1"
+chacha20poly1305 = "0.9"
