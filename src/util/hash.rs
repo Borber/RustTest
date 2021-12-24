@@ -82,9 +82,20 @@ fn copy_wide(mut reader: impl Read, hasher: &mut blake3::Hasher) -> io::Result<u
 }
 
 pub fn hash_one(path: &Path) -> Result<String> {
-    let mut block = [0; blake3::guts::BLOCK_LEN];
     let mut input = Input::open(path)?;
     let mut output = input.hash()?;
     let s = output.to_string();
     Ok(s)
+}
+
+pub fn get_blake3_hash(data: &Vec<u8>) -> Result<blake3::Hash> {
+    let hash: blake3::Hash = if data.len() < 128000 {
+        blake3::hash(&data)
+    } else {
+        let input: &[u8] = &data;
+        let mut hasher = blake3::Hasher::new();
+        hasher.update_rayon(input);
+        hasher.finalize()
+    };
+    Ok(hash)
 }

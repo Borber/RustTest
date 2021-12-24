@@ -1,4 +1,9 @@
-# 测试一下注释
-# mlar 的绝对位置
-[mlar]
-path = "C:\\Users\\BORBER\\CLionProjects\\RustTest\\bin\\mlar"
+[base]
+# 分别为
+# 不打包, 直接打包为 tar.gz不进行加密
+# 打包为加密7z后再打包为tar.gz
+# 打包为加密7z后进行伪装tar.gz
+pack_mode = "C:\\Users\\BORBER\\CLionProjects\\RustTest\\bin\\mlar"
+[lib]
+_7z = "bin/7z.exe"
+

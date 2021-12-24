@@ -8,12 +8,18 @@ use crate::errors::{DaMieError, rs_error};
 
 #[derive(Deserialize)]
 pub struct RustConfig {
-    mlar: MlarConfig
+    base: Base,
+    lib: Libraries
 }
 
 #[derive(Deserialize)]
-pub struct MlarConfig {
-    path: String
+pub struct Base {
+    pack_mode: u8,
+}
+
+#[derive(Deserialize)]
+pub struct Libraries {
+    _7z: String
 }
 
 impl std::fmt::Display for RustConfig {
@@ -23,7 +29,7 @@ impl std::fmt::Display for RustConfig {
           [mlar]
           path = {}
           "),
-               self.mlar.path)
+               self.base.pack_mode)
     }
 }
 
