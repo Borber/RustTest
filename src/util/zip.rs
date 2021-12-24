@@ -28,8 +28,8 @@ pub fn unpack(path: &str, dst: &str) -> Result<(), std::io::Error>{
     Ok(())
 }
 
-pub fn compress(source: &str) -> io::Result<()> {
-    let mut file = fs::File::open(source)?;
+pub fn compress(source: &str) -> Result<(), io::Error> {
+    let mut file = fs::read_dir(source)?;
     let mut encoder = {
         let target = fs::File::create(source.to_string() + SUFFIX)?;
         zstd::Encoder::new(target, 1)?

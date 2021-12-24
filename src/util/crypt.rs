@@ -8,7 +8,7 @@ use rand::distributions::Alphanumeric;
 
 pub fn encrypt_chacha(cleartext: Vec<u8>, key: &str) -> Vec<u8>{
     let key = Key::from_slice(key.as_bytes());
-    let aead = XChaCha20Poly1305::new(key);
+    let aead = XChaCha20Poly1305::new(&key);
     let nonce = XNonce::from_slice(b"extra long unique nonce!");
     let ciphertext: Vec<u8> = aead
         .encrypt(nonce, cleartext.as_ref())
@@ -16,12 +16,12 @@ pub fn encrypt_chacha(cleartext: Vec<u8>, key: &str) -> Vec<u8>{
     ciphertext
 }
 
-pub fn decrypt_chacha(ciphertext: Vec<u8>, key: &str) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
+pub fn decrypt_chacha(ciphertext: Vec<u8>, key: &str) -> Vec<u8> {
     let key = Key::from_slice(key.as_bytes());
-    let aead = XChaCha20Poly1305::new(key);
+    let aead = XChaCha20Poly1305::new(&key);
     let nonce = XNonce::from_slice(b"extra long unique nonce!");
     let plaintext: Vec<u8> = aead
         .decrypt(nonce, ciphertext.as_ref())
         .expect("decryption failure!");
-    Ok(plaintext)
+    plaintext
 }

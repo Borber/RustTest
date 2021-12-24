@@ -17,16 +17,17 @@ fn test_encrypt() -> Result<(), Box<dyn std::error::Error>>{
     // let path = Path::new(r"C:\Users\BORBER\Downloads\Lark-win32_ia32-4.10.16-signed.exe");
     // let mut data = file::read_file(path)?;
     let data = b"67890";
-    let data2 = b"12456";
+    let data2 = b"12456"; //[6, 191, 154, 166, 8, 23, 148, 191, 194, 164, 94, 56, 1, 6, 126, 117, 114, 219, 128, 48, 190]
+    let data3 = b"12457";
     let hash = get_blake3_hash(&data.to_vec())?;
     let uuid = Uuid::new_v4();
     // let encrypt_data = encrypt_chacha(data.to_vec(), hash.to_string().as_str().split_at(32).0)?;
-    let encrypt_data = encrypt_chacha(data.to_vec(), "41649a37ade3a3c0bf2a12dfe4f1c8ba");
-    let encrypt_data2 = encrypt_chacha(data2.to_vec(), "41649a37ade3a3c0bf2a12dfe4f1c8ba");
+    let encrypt_data = encrypt_chacha(data3.to_vec(), "41649a37ade3a3c0bf2a12dfe4f1c8ba");
+    // let encrypt_data2 = encrypt_chacha(data2.to_vec(), "41649a37ade3a3c0bf2a12dfe4f1c8ba");
     println!("{}", hash.to_string().as_str().split_at(32).0);
     let mut file = File::create(Path::new("data").join("encrypt"))?;
     file.write_all(&encrypt_data)?;
-    file.write_all(&encrypt_data2)?;
+    // file.write_all(&encrypt_data2)?;
     Ok(())
 }
 
@@ -36,7 +37,8 @@ fn test_decrypt() -> Result<(), Box<dyn std::error::Error>>{
     let mut data = file::read_file(path)?;
     let hash = "41649a37ade3a3c0bf2a12dfe4f1c8baa517701c08cc635f405016d3234b8c0b";
     let uuid = Uuid::new_v4();
-    let encrypt_data = decrypt_chacha(data, "41649a37ade3a3c0bf2a12dfe4f1c8ba")?;
+    println!("{:?}", data);
+    let encrypt_data = decrypt_chacha(data, "41649a37ade3a3c0bf2a12dfe4f1c8ba");
     println!("{}", hash.to_string());
     let mut file = File::create(Path::new("data").join("decrypt"))?;
     file.write_all(&encrypt_data)?;
