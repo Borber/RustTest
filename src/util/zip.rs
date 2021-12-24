@@ -4,7 +4,8 @@ use flate2::Compression;
 use flate2::write::GzEncoder;
 use flate2::read::GzDecoder;
 use tar::Archive;
-// 7z.exe a -t7z -p123456 pack.7z -mhe=on -m0=Copy "C:\Users\BORBER\VirtualBox VMs\vm_default_1631520211017_54809\packer-virtualbox.vmdk"
+// v 分卷
+// 7z.exe a -t7z -v1G -p123456 pack.7z -mhe=on -m0=Copy "C:\Users\BORBER\VirtualBox VMs\vm_default_1631520211017_54809\packer-virtualbox.vmdk"
 const SUFFIX: &'static str = ".zst";
 
 pub fn pack(output: &str,path: &str, src_path: &str) -> Result<(), std::io::Error> {
